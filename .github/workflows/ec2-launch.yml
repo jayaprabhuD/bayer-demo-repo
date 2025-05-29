@@ -1,44 +1,30 @@
 name: Launch EC2 Instance in Mumbai
 
-permissions:
-  id-token: write
-  contents: read
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::arn:aws:iam::058264249757:role/GitHubActionsOIDCRole:role/GitHubActionsOIDCRole
-          aws-region: ap-south-1
-
 on:
   workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   launch-ec2:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # - name: Configure AWS credentials
-    #   uses: aws-actions/configure-aws-credentials@v2
-    #   with:
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-south-1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::058264249757:role/GitHubActionsOIDCRole
+          aws-region: ap-south-1
 
-    - name: Launch EC2 instance
-      run: |
-        aws ec2 run-instances \
-          --image-id ami-03bb6d83c60fc5f7c \
-          --count 1 \
-          --instance-type t2.micro \
-          --security-groups default
+      - name: Launch EC2 instance
+        run: |
+          aws ec2 run-instances \
+            --image-id ami-03bb6d83c60fc5f7c \
+            --count 1 \
+            --instance-type t2.micro \
+            --security-groups default
